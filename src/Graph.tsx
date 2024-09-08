@@ -23,12 +23,22 @@ class Graph extends Component<IProps, {}> {
     const elem = document.getElementsByTagName('perspective-viewer')[0] as unknown as PerspectiveViewerElement;
 
     const schema = {
-      stock: 'string',
-      top_ask_price: 'float',
-      top_bid_price: 'float',
-      timestamp: 'date',
-    };
 
+      price_abc: 'float',
+      
+      price def: 'float',
+      
+      ratio: 'float',
+      
+      timestamp: 'date',
+      
+      upper bound: 'float',
+      
+      lower bound: 'float',
+      
+      trigger_alert: 'float',
+      
+      };
     if (window.perspective && window.perspective.worker()) {
       this.table = window.perspective.worker().table(schema);
     }
@@ -40,19 +50,22 @@ class Graph extends Component<IProps, {}> {
       elem.setAttribute('row-pivots', '["timestamp"]');
       elem.setAttribute('columns', '["top_ask_price"]');
       elem.setAttribute('aggregates', JSON.stringify({
-        stock: 'distinctcount',
-        top_ask_price: 'avg',
-        top_bid_price: 'avg',
-        timestamp: 'distinct count',
-      }));
+        price_abc: 'avg',      
+        price def: 'avg',        
+        ratio: 'avg',   
+        timestamp: 'distinct count',     
+        upper bound: 'avg',        
+        lower bound: 'avg',        
+        trigger_alert:'avg',
+             }));
     }
   }
 
   componentDidUpdate() {
     if (this.table) {
-      this.table.update(
+      this.table.update([
         DataManipulator.generateRow(this.props.data),
-      );
+     ] as unknown as Tabledata);
     }
   }
 }
